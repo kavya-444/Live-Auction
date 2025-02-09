@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Auction</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: lightseagreen;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .auction-container {
+            width: 50%;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bid-section {
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 12px;
+            width: 75%;
+            border: 2px solid #ff7e5f;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #ff7e5f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #e76f51;
+        }
+
+        #message {
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        h1,
+        h2 {
+            color: #444;
+        }
+
+        #timer {
+            font-weight: bold;
+            color: #d62828;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auction-container">
+        <h1>Live Auction</h1>
+        <div class="item">
+            <img src="items.jpg" alt="Auction Item" class="item-img">
+            <h2>Antique Vase</h2>
+            <p>Starting Bid: $100</p>
+            <p id="highest-bid">Current Highest Bid: $100</p>
+            <p id="timer">Auction ends in: <span id="countdown"></span></p>
+        </div>
+        <div class="bid-section">
+            <input type="number" id="bid-input" placeholder="Enter your bid" min="101">
+            <button onclick="placeBid()">Place Bid</button>
+        </div>
+        <p id="message"></p>
+    </div>
+    <script>
+        let highestBid = 100;
+        let auctionEndTime = new Date().getTime() + (5 * 60 * 1000);
+
+        function placeBid() {
+            let bidInput = document.getElementById("bid-input").value;
+            let message = document.getElementById("message");
+            if (bidInput > highestBid) {
+                highestBid = bidInput;
+                document.getElementById("highest-bid").innerText = "Current Highest Bid: $" + highestBid;
+                message.innerText = "Bid placed successfully!";
+                message.style.color = "green";
+            } else {
+                message.innerText = "Bid must be higher than the current bid!";
+                message.style.color = "red";
+            }
+        }
+
+        function updateCountdown() {
+            let now = new Date().getTime();
+            let timeLeft = auctionEndTime - now;
+            if (timeLeft > 0) {
+                let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                document.getElementById("countdown").innerText = minutes + "m " + seconds + "s";
+            } else {
+                document.getElementById("countdown").innerText = "Auction Ended";
+                document.getElementById("bid-input").disabled = true;
+            }
+        }
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+
+</html>
